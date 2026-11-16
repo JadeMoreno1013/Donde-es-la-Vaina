@@ -1,4 +1,19 @@
-# Donde es la Vaina API
+# Donde es la Vaina
+
+Plataforma web de venta de entradas: **API REST** (Node.js, Express y MySQL) y **frontend** (HTML, CSS y JavaScript) servido por el mismo servidor. Corte 3: integración web y autenticación segura.
+
+## Resumen del corte 3
+
+- Frontend SPA en `public/` conectado a la API real (sin datos simulados), con estados de carga, error y confirmación.
+- Contraseñas almacenadas con hash y salt (bcrypt); registro y login verifican contra el hash. Los usuarios existentes se migran con `npm run migrate:passwords`.
+- Login de administrador en `/#/admin/login` y panel para gestionar eventos, ventas y usuarios.
+- Diseño basado en el prototipo de Figma, responsive (escritorio y móvil).
+
+**Video de funcionamiento:** <PEGAR-LINK-DE-YOUTUBE>
+
+---
+
+## API REST
 
 API REST para la venta de entradas a eventos (conciertos, teatro y otros), construida con Node.js, Express y MySQL. Permite registrar usuarios, administrar lugares y eventos, comprar entradas y dejar reseñas de eventos finalizados.
 
@@ -36,24 +51,41 @@ API REST para la venta de entradas a eventos (conciertos, teatro y otros), const
 
    Debe aparecer `Server running in http://localhost:5000`.
 
+5. Abre **http://localhost:5000** para usar la aplicación web. Si ya tenías usuarios con contraseña en texto plano, ejecuta antes `npm run migrate:passwords`.
+
 ## Documentación (Swagger)
 
 Con el servidor corriendo, abre **http://localhost:5000/docs**. Desde ahí puedes ver todos los endpoints, sus ejemplos y probarlos.
 
 La especificación está en [`docs/openapi.yaml`](docs/openapi.yaml). También puede abrirse en el [editor de Swagger](https://editor.swagger.io/) importando ese archivo.
 
+## Frontend
+
+La interfaz está en `public/` (HTML, CSS y JavaScript sin framework) y se sirve desde el mismo servidor.
+
+| Ruta | Descripción |
+|---|---|
+| `/#/` | Inicio con buscador |
+| `/#/events` | Catálogo con búsqueda y filtros |
+| `/#/login`, `/#/register` | Acceso de usuarios |
+| `/#/my-tickets`, `/#/my-reviews` | Entradas y reseñas del usuario |
+| `/#/admin/login` | Acceso de administrador |
+| `/#/admin` | Panel (dashboard, eventos, ventas, usuarios) |
+
+Los estilos están en `public/css/main.css` y `public/css/design.css`; las imágenes, en `public/img/`.
+
 ## Crear el primer administrador
 
 El registro público siempre crea usuarios normales. Para tener un administrador:
 
-1. Registra al usuario con `POST /users` (desde Swagger o Postman).
-2. Ascéndelo directamente en la base de datos:
+1. Regístrate en `/#/register` (o con `POST /users`).
+2. Ascéndelo en la base de datos:
 
    ```sql
-   UPDATE app_user SET is_admin = TRUE WHERE id_user = 1;
+   UPDATE app_user SET is_admin = TRUE WHERE email = 'tu-correo@ejemplo.com';
    ```
 
-3. Inicia sesión de nuevo con `POST /sessions` para obtener un token con ese rol.
+3. Inicia sesión en `/#/admin/login`. Si ya tenías sesión abierta, ciérrala y vuelve a entrar para obtener el token con ese rol.
 
 ## Autenticación
 
