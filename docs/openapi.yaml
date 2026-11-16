@@ -1169,7 +1169,7 @@ components:
         password:
           type: string
           minLength: 8
-          maxLength: 255
+          maxLength: 72
       required:
       - name
       - last_name
@@ -1191,7 +1191,7 @@ components:
         password:
           type: string
           minLength: 8
-          maxLength: 255
+          maxLength: 72
         is_admin:
           type: boolean
     Venue:

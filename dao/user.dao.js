@@ -17,6 +17,15 @@ const findByEmail = async (email) => {
     return rows[0];
 };
 
+const findAllCredentials = async () => {
+    const [rows] = await pool.query('SELECT id_user, password FROM app_user');
+    return rows;
+};
+
+const updatePassword = async (id, passwordHash) => {
+    await pool.query('UPDATE app_user SET password = ? WHERE id_user = ?', [passwordHash, id]);
+};
+
 const insert = async (user) => {
     const [result] = await pool.query('INSERT INTO app_user SET ?', [user]);
     return result.insertId;
@@ -30,4 +39,4 @@ const remove = async (id) => {
     await pool.query('DELETE FROM app_user WHERE id_user = ?', [id]);
 };
 
-module.exports = { findAll, findById, findByEmail, insert, update, remove };
+module.exports = { findAll, findById, findByEmail, findAllCredentials, updatePassword, insert, update, remove };

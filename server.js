@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const serverConfig = require('./env/serverConfig');
 const { notFoundHandler, errorHandler } = require('./middlewares/error.middleware');
@@ -12,6 +13,7 @@ const docsRoutes = require('./routes/docs.routes');
 const api = express();
 
 api.use(express.json());
+api.use(express.static(path.join(__dirname, 'public')));
 
 api.use('/docs', docsRoutes);
 api.use('/sessions', sessionRoutes);
